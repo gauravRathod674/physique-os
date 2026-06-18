@@ -103,7 +103,9 @@ function walkMinutes(value) {
 }
 function hasWorkoutLogForDate(logs, dateKey) {
   return Object.keys(logs || {}).some(
-    (exId) => Array.isArray(logs[exId]) && logs[exId].some((entry) => entry.date === dateKey),
+    (exId) =>
+      Array.isArray(logs[exId]) &&
+      logs[exId].some((entry) => entry.date === dateKey),
   );
 }
 function workoutDoneForDate(logs, completions, dateKey) {
@@ -113,7 +115,9 @@ function getWalkTarget(dayType) {
   return WALK_TARGETS[dayType] || WALK_TARGETS.Default;
 }
 function getNextBcaInfo(inbodyEntries) {
-  const lastScan = inbodyEntries?.length ? inbodyEntries[inbodyEntries.length - 1] : null;
+  const lastScan = inbodyEntries?.length
+    ? inbodyEntries[inbodyEntries.length - 1]
+    : null;
   const referenceDate = lastScan?.date ? new Date(lastScan.date) : new Date();
   const nextDate = addDays(referenceDate, 30);
   const msRemaining = nextDate.getTime() - Date.now();
@@ -124,7 +128,9 @@ function getNextBcaInfo(inbodyEntries) {
   };
 }
 function downloadJson(filename, data) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json",
+  });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -143,8 +149,6 @@ function daysUntil(targetDay) {
   }
   return 30;
 }
-
-// ── EXERCISE DATA ───────────────────────────────────────────────────────────
 const PUSH = [
   {
     id: "idp",
@@ -158,16 +162,18 @@ const PUSH = [
     rest: 120,
     sw: 10,
     cues: [
-      "Set bench to 30°",
-      "Retract scapula",
-      "Deep stretch at bottom",
-      "Press up and inward",
-      "Keep chest up",
+      "Set bench around 30°",
+      "Pull shoulder blades back and down",
+      "Keep chest high and ribs controlled",
+      "Lower dumbbells to upper chest line",
+      "Press up and slightly inward",
     ],
     mistakes: [
-      "Half reps",
-      "Excessive shoulder involvement",
-      "Elbows flaring too wide",
+      "Bench set too steep",
+      "Flaring elbows too wide",
+      "Bouncing off the bottom",
+      "Cutting the stretch short",
+      "Turning it into a shoulder press",
     ],
   },
   {
@@ -182,11 +188,19 @@ const PUSH = [
     rest: 90,
     sw: 30,
     cues: [
-      "Handles at mid-chest height",
-      "Full squeeze at top",
-      "Control the negative",
+      "Set seat so handles line up with mid-chest",
+      "Keep shoulder blades pinned back",
+      "Lower under control to a deep stretch",
+      "Drive through the chest, not the shoulders",
+      "Pause briefly before pressing back",
     ],
-    mistakes: ["Shrugging shoulders", "Rushing reps"],
+    mistakes: [
+      "Shoulders rolling forward",
+      "Partial range of motion",
+      "Locking out aggressively",
+      "Pushing with momentum",
+      "Letting elbows flare too high",
+    ],
   },
   {
     id: "pec",
@@ -200,48 +214,99 @@ const PUSH = [
     rest: 75,
     sw: 25,
     cues: [
-      "Slight elbow bend",
-      "Get the full stretch",
-      "Squeeze hard at contraction",
+      "Keep a soft bend in the elbows",
+      "Lift the chest and keep shoulders back",
+      "Open up fully for a deep stretch",
+      "Bring hands together by squeezing the pecs",
+      "Return slowly and under control",
     ],
-    mistakes: ["Arms straightening (too heavy)", "Not getting full range"],
+    mistakes: [
+      "Turning it into a press",
+      "Shrugging the shoulders",
+      "Using too much elbow bend",
+      "Rushing the negative",
+      "Stopping short of the stretch",
+    ],
+  },
+
+  {
+    id: "lrm",
+    name: "Lateral Raise Machine",
+    muscle: "Lateral Delts",
+    sec: "Upper Traps",
+    sets: 4,
+    range: [12, 20],
+    rir: 1,
+    tempo: "2-1-2",
+    rest: 60,
+    sw: 5,
+    cues: [
+      "Set shoulders down before each rep",
+      "Lead the movement with the elbows",
+      "Raise until shoulder height",
+      "Pause briefly at the top",
+      "Lower slowly without losing tension",
+    ],
+    mistakes: [
+      "Shrugging into the traps",
+      "Swinging the torso",
+      "Lifting too high above shoulder level",
+      "Using momentum on every rep",
+      "Letting tension drop at the bottom",
+    ],
   },
   {
     id: "ssp",
     name: "Seated Shoulder Press",
     muscle: "Lateral Delts",
     sec: "Front Delts, Triceps",
-    sets: 3,
-    range: [8, 12],
+    sets: 2,
+    range: [6, 10],
     rir: 2,
     tempo: "2-1-1",
     rest: 120,
     sw: 12,
     cues: [
-      "Neutral spine",
-      "Press directly overhead",
-      "Slight forward lean ok",
+      "Brace your core before pressing",
+      "Keep ribs down and glutes tight",
+      "Press in a smooth vertical path",
+      "Lower until elbows are just below shoulder height",
+      "Keep wrists stacked over elbows",
     ],
-    mistakes: ["Arching lower back", "Partial reps"],
+    mistakes: [
+      "Overarching the lower back",
+      "Cutting depth short",
+      "Flaring elbows too much",
+      "Bouncing the bottom rep",
+      "Pressing too far forward",
+    ],
   },
+
   {
-    id: "clr",
-    name: "Cable Lateral Raise",
-    muscle: "Lateral Delts",
-    sec: "Upper Traps",
+    id: "ore",
+    name: "Overhead Rope Extension",
+    muscle: "Triceps Long Head",
+    sec: "Triceps",
     sets: 3,
-    range: [12, 15],
+    range: [8, 12],
     rir: 1,
-    tempo: "2-1-2",
-    rest: 60,
-    sw: 5,
+    tempo: "2-0-2",
+    rest: 75,
+    sw: 10,
     cues: [
-      "Lead with elbow",
-      "Pinky higher than thumb",
-      "Stop at shoulder height",
-      "Slight forward lean",
+      "Keep elbows pointed forward and still",
+      "Reach a deep stretch behind the head",
+      "Open the rope as you extend",
+      "Lock out by squeezing the triceps",
+      "Let the biceps stay out of the movement",
     ],
-    mistakes: ["Using momentum", "Going too heavy", "Shrugging"],
+    mistakes: [
+      "Letting elbows drift wide",
+      "Using the shoulders to move the weight",
+      "Shortening the stretch",
+      "Swinging the torso",
+      "Rushing the lowering phase",
+    ],
   },
   {
     id: "rpd",
@@ -254,26 +319,46 @@ const PUSH = [
     tempo: "2-0-2",
     rest: 75,
     sw: 15,
-    cues: ["Split rope at bottom", "Elbows tight to sides", "Full extension"],
-    mistakes: ["Elbows drifting forward", "No full extension"],
+    cues: [
+      "Pin elbows to your sides",
+      "Stay tall and slightly braced",
+      "Push the rope all the way down",
+      "Spread the rope apart at lockout",
+      "Control the return without letting elbows move",
+    ],
+    mistakes: [
+      "Letting elbows travel forward",
+      "Leaning bodyweight into the stack",
+      "Stopping before full lockout",
+      "Shrugging the shoulders",
+      "Using too much momentum",
+    ],
   },
   {
-    id: "oce",
-    name: "Overhead Cable Extension",
-    muscle: "Triceps Long Head",
-    sec: "Triceps",
-    sets: 3,
-    range: [10, 15],
+    id: "tcc",
+    name: "Tricep Cable Crossover",
+    muscle: "Triceps",
+    sec: "Lateral Head",
+    sets: 2,
+    range: [12, 15],
     rir: 1,
     tempo: "2-0-2",
-    rest: 75,
-    sw: 10,
+    rest: 60,
+    sw: 8,
     cues: [
-      "Full stretch overhead",
-      "Elbows close together",
-      "Complete extension",
+      "Keep upper arms slightly forward",
+      "Move only through the elbow",
+      "Cross hands slightly at the finish",
+      "Squeeze hard at lockout",
+      "Return slowly with control",
     ],
-    mistakes: ["Elbows flaring wide", "Short range of motion"],
+    mistakes: [
+      "Turning it into a chest movement",
+      "Letting shoulders take over",
+      "Using a fast sloppy negative",
+      "Moving elbows around too much",
+      "Cutting the squeeze short",
+    ],
   },
 ];
 
@@ -284,23 +369,53 @@ const PULL = [
     muscle: "Lats",
     sec: "Biceps, Rear Delts",
     sets: 3,
-    range: [8, 12],
+    range: [6, 10],
     rir: 2,
     tempo: "2-1-2",
     rest: 120,
     sw: 30,
     cues: [
-      "Lean back slightly",
-      "Pull to upper chest",
-      "Initiate with elbows",
-      "Stretch fully at top",
+      "Chest up and ribs controlled",
+      "Pull elbows down to your sides",
+      "Bring the bar to upper chest",
+      "Stretch fully at the top",
+      "Pause briefly at the bottom",
     ],
     mistakes: [
-      "Pulling behind neck",
-      "Using body momentum",
-      "Not stretching lats",
+      "Leaning back too much",
+      "Pulling behind the neck",
+      "Using momentum",
+      "Cutting the top stretch short",
+      "Yanking with the hands only",
     ],
   },
+  {
+    id: "sal",
+    name: "Single Arm Cable Lat Pulldown",
+    muscle: "Lats",
+    sec: "Biceps",
+    sets: 3,
+    range: [10, 15],
+    rir: 1,
+    tempo: "2-1-2",
+    rest: 90,
+    sw: 15,
+    cues: [
+      "Slight lean away for a big stretch",
+      "Drive elbow toward the hip",
+      "Keep torso mostly still",
+      "Feel the lat shorten at the bottom",
+      "Control the return all the way up",
+    ],
+    mistakes: [
+      "Twisting the torso",
+      "Curling with the biceps only",
+      "Shrugging the shoulder",
+      "Not reaching full stretch",
+      "Using body swing",
+    ],
+  },
+
   {
     id: "csr",
     name: "Chest Supported Row",
@@ -313,69 +428,74 @@ const PULL = [
     rest: 120,
     sw: 20,
     cues: [
-      "Chest on pad at all times",
-      "Row to lower chest",
-      "Elbows 45° from torso",
-      "Squeeze shoulder blades",
+      "Keep chest glued to the pad",
+      "Pull elbows back and slightly out",
+      "Squeeze shoulder blades together",
+      "Reach forward for a full stretch",
+      "Control the negative without jerking",
     ],
-    mistakes: ["Raising chest off pad", "Shrugging at top"],
+    mistakes: [
+      "Lifting the chest off the pad",
+      "Shortening the stretch",
+      "Shrugging into the traps",
+      "Using arms instead of back",
+      "Rushing every rep",
+    ],
   },
   {
-    id: "sal",
-    name: "Single Arm Cable Lat Pulldown",
-    muscle: "Lats",
-    sec: "Biceps",
-    sets: 3,
-    range: [10, 12],
-    rir: 1,
-    tempo: "2-1-2",
-    rest: 90,
-    sw: 15,
-    cues: [
-      "Lean away from cable",
-      "Reach for full stretch overhead",
-      "Pull to hip",
-      "Rotate wrist",
-    ],
-    mistakes: ["Not leaning back", "Short range of motion"],
-  },
-  {
-    id: "scr",
-    name: "Seated Cable Row",
+    id: "plr",
+    name: "Plate Loaded Row Machine",
     muscle: "Mid Back",
     sec: "Lats, Biceps",
     sets: 3,
-    range: [10, 12],
+    range: [8, 12],
     rir: 2,
     tempo: "2-1-2",
-    rest: 90,
-    sw: 35,
+    rest: 120,
+    sw: 40,
     cues: [
-      "Slight forward lean at stretch",
-      "Neutral spine when rowing",
-      "Elbows tight to sides",
+      "Keep torso stable against the pad",
+      "Pull toward lower ribs or stomach",
+      "Lead with the elbows",
+      "Let the shoulders stretch forward fully",
+      "Squeeze the mid back at the finish",
     ],
-    mistakes: ["Swinging torso", "Rounding lower back"],
+    mistakes: [
+      "Using lower back to heave the weight",
+      "Partial reps",
+      "Pulling only with the hands",
+      "Rushing the negative",
+      "Turning it into a biceps curl",
+    ],
   },
+
   {
-    id: "fpu",
-    name: "Face Pull",
+    id: "rdf",
+    name: "Rear Delt Fly",
     muscle: "Rear Delts",
-    sec: "Rotator Cuff, Traps",
+    sec: "Rotator Cuff",
     sets: 3,
-    range: [15, 20],
+    range: [12, 20],
     rir: 1,
     tempo: "2-0-2",
     rest: 60,
-    sw: 10,
+    sw: 8,
     cues: [
-      "Cable at face height",
-      "Pull to face level",
-      "External rotation at end",
-      "Elbows high",
+      "Keep a soft bend in the elbows",
+      "Pull wide, not down",
+      "Lead the motion with the rear delts",
+      "Pause at peak contraction",
+      "Return slowly with tension",
     ],
-    mistakes: ["Too heavy", "No external rotation"],
+    mistakes: [
+      "Turning it into a row",
+      "Shrugging traps at the top",
+      "Swinging the body",
+      "Using too much weight",
+      "Cutting the rear delt squeeze short",
+    ],
   },
+
   {
     id: "prc",
     name: "Preacher Curl",
@@ -388,48 +508,73 @@ const PULL = [
     rest: 90,
     sw: 10,
     cues: [
-      "Full extension at bottom",
-      "Very slow negative",
-      "Don't cheat at top",
+      "Keep upper arms fixed on the pad",
+      "Start from a full stretch",
+      "Curl smoothly without bouncing",
+      "Squeeze hard at the top",
+      "Lower slowly and fully",
     ],
-    mistakes: ["Partial reps", "Raising elbows off pad"],
+    mistakes: [
+      "Lifting the elbows off the pad",
+      "Bouncing the bottom rep",
+      "Using body momentum",
+      "Not fully extending the elbows",
+      "Rushing the negative",
+    ],
   },
   {
-    id: "idc",
-    name: "Incline Dumbbell Curl",
-    muscle: "Biceps Long Head",
+    id: "bay",
+    name: "Bayesian Curl",
+    muscle: "Biceps",
     sec: "Biceps",
     sets: 3,
-    range: [8, 12],
-    rir: 2,
+    range: [10, 15],
+    rir: 1,
     tempo: "3-0-2",
-    rest: 90,
-    sw: 7.5,
+    rest: 75,
+    sw: 8,
     cues: [
-      "Arms hang fully straight",
-      "Don't swing",
-      "Full stretch is critical",
+      "Keep the arm slightly behind the body",
+      "Let the biceps stretch at the bottom",
+      "Curl without moving the shoulder",
+      "Squeeze the biceps hard at the top",
+      "Control the return slowly",
     ],
-    mistakes: ["Elbows moving forward", "Swinging body"],
+    mistakes: [
+      "Letting the elbow drift forward",
+      "Using the shoulder to cheat",
+      "Shortening the stretch",
+      "Swinging the torso",
+      "Rushing the eccentric",
+    ],
   },
   {
     id: "hmc",
-    name: "Hammer Curl",
+    name: "Dumbbell Hammer Curl",
     muscle: "Brachialis",
     sec: "Biceps, Forearms",
     sets: 3,
-    range: [10, 12],
+    range: [8, 12],
     rir: 1,
     tempo: "2-0-2",
     rest: 75,
     sw: 10,
     cues: [
-      "Neutral grip throughout",
-      "Alternate arms",
-      "Don't rotate wrist to supinate",
+      "Keep palms facing each other",
+      "Pin elbows close to your sides",
+      "Curl straight up without twisting",
+      "Squeeze the top briefly",
+      "Lower under full control",
     ],
-    mistakes: ["Rotating to supinate", "Using momentum"],
+    mistakes: [
+      "Swinging the torso",
+      "Turning it into a regular curl",
+      "Letting elbows drift forward",
+      "Using momentum",
+      "Bending wrists backward",
+    ],
   },
+
   {
     id: "reb",
     name: "Reverse EZ Bar Curl",
@@ -441,36 +586,20 @@ const PULL = [
     tempo: "2-0-2",
     rest: 60,
     sw: 10,
-    cues: ["Overhand grip", "Elbows to sides", "Full range of motion"],
-    mistakes: ["Wrist breakdown", "Going too heavy"],
-  },
-  {
-    id: "wrc",
-    name: "Wrist Curl",
-    muscle: "Forearm Flexors",
-    sec: "",
-    sets: 2,
-    range: [15, 20],
-    rir: 1,
-    tempo: "2-0-2",
-    rest: 45,
-    sw: 7.5,
-    cues: ["Forearms on bench", "Full range of motion"],
-    mistakes: ["Too heavy", "Partial reps"],
-  },
-  {
-    id: "rwc",
-    name: "Reverse Wrist Curl",
-    muscle: "Forearm Extensors",
-    sec: "",
-    sets: 2,
-    range: [15, 20],
-    rir: 1,
-    tempo: "2-0-2",
-    rest: 45,
-    sw: 5,
-    cues: ["Overhand grip", "Full extension and flexion"],
-    mistakes: ["Too heavy"],
+    cues: [
+      "Use an overhand grip",
+      "Keep wrists straight",
+      "Lock elbows by your sides",
+      "Curl smoothly through the forearms",
+      "Lower slowly without losing tension",
+    ],
+    mistakes: [
+      "Bending the wrists back",
+      "Using body swing",
+      "Letting elbows move forward",
+      "Going too heavy too soon",
+      "Cutting the range short",
+    ],
   },
 ];
 
@@ -487,12 +616,19 @@ const LEGS = [
     rest: 150,
     sw: 40,
     cues: [
-      "Feet shoulder width",
-      "Deep squat below parallel",
-      "Drive through heels",
-      "Keep back against pad throughout",
+      "Place feet so knees track comfortably",
+      "Brace hard before descending",
+      "Lower deep with full control",
+      "Keep heels planted throughout",
+      "Drive up through midfoot",
     ],
-    mistakes: ["Knees caving in", "Not going deep enough", "Raising heels"],
+    mistakes: [
+      "Cutting depth short",
+      "Heels lifting off the platform",
+      "Knees collapsing inward",
+      "Bouncing out of the bottom",
+      "Rounding the lower back",
+    ],
   },
   {
     id: "lgp",
@@ -506,37 +642,47 @@ const LEGS = [
     rest: 120,
     sw: 80,
     cues: [
-      "Feet hip width",
-      "Never lock knees",
-      "Full range of motion",
-      "Heels stay on platform",
-    ],
-    mistakes: ["Knees caving", "Bouncing at bottom", "Locking knees"],
-  },
-  {
-    id: "rdl",
-    name: "Romanian Deadlift",
-    muscle: "Hamstrings",
-    sec: "Glutes, Lower Back",
-    sets: 3,
-    range: [8, 12],
-    rir: 2,
-    tempo: "3-1-1",
-    rest: 120,
-    sw: 30,
-    cues: [
-      "Hip hinge pattern",
-      "Soft knee bend",
-      "Bar close to legs",
-      "Feel hamstring stretch",
-      "Neutral spine always",
+      "Keep hips and lower back glued down",
+      "Lower until quads get a deep stretch",
+      "Push evenly through both feet",
+      "Control the descent fully",
+      "Stop just short of locking the knees hard",
     ],
     mistakes: [
-      "Rounding lower back",
-      "Squatting instead of hinging",
-      "Bar drifting forward",
+      "Letting hips rise off the pad",
+      "Half reps",
+      "Bouncing the sled",
+      "Locking knees aggressively",
+      "Letting feet shift around",
     ],
   },
+  {
+    id: "lge",
+    name: "Leg Extension",
+    muscle: "Quads",
+    sec: "",
+    sets: 3,
+    range: [12, 15],
+    rir: 1,
+    tempo: "2-1-3",
+    rest: 75,
+    sw: 20,
+    cues: [
+      "Set the pad above the ankle",
+      "Lift through the quads, not momentum",
+      "Squeeze hard at the top",
+      "Lower slowly into a deep bend",
+      "Keep your hips pressed into the seat",
+    ],
+    mistakes: [
+      "Swinging the weight up",
+      "Lifting the hips off the seat",
+      "Using a short range of motion",
+      "Dropping the weight fast",
+      "Kicking too explosively",
+    ],
+  },
+
   {
     id: "lgc",
     name: "Leg Curl",
@@ -549,84 +695,99 @@ const LEGS = [
     rest: 90,
     sw: 20,
     cues: [
-      "Toes pointed",
-      "Full stretch at extension",
-      "Curl all the way to end range",
-      "Extremely slow negative",
+      "Keep hips pinned down",
+      "Curl through the hamstrings only",
+      "Pause at full contraction",
+      "Lower slowly into the stretch",
+      "Keep the pad positioned securely",
     ],
-    mistakes: ["Rushing the negative", "Hips rising off pad"],
-  },
-  {
-    id: "lge",
-    name: "Leg Extension",
-    muscle: "Quads",
-    sec: "",
-    sets: 3,
-    range: [10, 15],
-    rir: 1,
-    tempo: "2-1-3",
-    rest: 75,
-    sw: 20,
-    cues: [
-      "Full extension and pause",
-      "Control the descent",
-      "Toes neutral or slightly in",
+    mistakes: [
+      "Lifting the hips",
+      "Rushing the negative",
+      "Using momentum",
+      "Cutting the squeeze short",
+      "Not reaching full stretch",
     ],
-    mistakes: ["No full extension", "Swinging weight up"],
   },
+
   {
     id: "cfr",
-    name: "Calf Raise",
+    name: "Standing Calf Raise",
     muscle: "Gastrocnemius",
     sec: "Soleus",
     sets: 4,
-    range: [12, 20],
+    range: [10, 15],
     rir: 1,
     tempo: "2-1-3",
     rest: 60,
     sw: 40,
     cues: [
-      "Full stretch at bottom",
-      "Pause at top",
-      "Single leg variation for more stretch",
+      "Get a deep stretch at the bottom",
+      "Rise high onto the toes",
+      "Pause briefly at the top",
+      "Keep knees stable",
+      "Use a full controlled range",
     ],
-    mistakes: ["Bouncing", "Partial range of motion"],
+    mistakes: [
+      "Bouncing reps",
+      "Shortening the stretch",
+      "Moving too fast",
+      "Letting feet roll outward",
+      "Using partial range",
+    ],
+  },
+
+  {
+    id: "wrc",
+    name: "Wrist Curl",
+    muscle: "Forearm Flexors",
+    sec: "",
+    sets: 2,
+    range: [12, 20],
+    rir: 1,
+    tempo: "2-0-2",
+    rest: 45,
+    sw: 7.5,
+    cues: [
+      "Support the forearms firmly",
+      "Let the wrists extend fully",
+      "Curl the weight through the fingers",
+      "Squeeze the forearms at the top",
+      "Lower slowly and fully",
+    ],
+    mistakes: [
+      "Moving the elbows",
+      "Using momentum",
+      "Cutting the stretch short",
+      "Rushing the reps",
+      "Letting the grip do all the work",
+    ],
   },
   {
-    id: "cbc",
-    name: "Cable Crunch",
-    muscle: "Rectus Abdominis",
-    sec: "Obliques",
-    sets: 3,
-    range: [12, 15],
+    id: "rwc",
+    name: "Reverse Wrist Curl",
+    muscle: "Forearm Extensors",
+    sec: "",
+    sets: 2,
+    range: [12, 20],
     rir: 1,
-    tempo: "2-1-2",
-    rest: 60,
-    sw: 15,
+    tempo: "2-0-2",
+    rest: 45,
+    sw: 5,
     cues: [
-      "Round the spine",
-      "Elbows to knees",
-      "Focus on upper abs contracting",
+      "Keep forearms supported",
+      "Lift by extending the wrists",
+      "Move with control",
+      "Pause briefly at the top",
+      "Lower slowly to full stretch",
     ],
-    mistakes: ["Hip flexor dominance", "Not rounding spine"],
-  },
-  {
-    id: "rvc",
-    name: "Reverse Crunch",
-    muscle: "Lower Abs",
-    sec: "Hip Flexors",
-    sets: 3,
-    range: [12, 15],
-    rir: 1,
-    tempo: "2-1-2",
-    rest: 60,
-    sw: 0,
-    cues: [
-      "Curl pelvis toward chest",
-      "Lower slowly with control",
-      "No momentum",
+    mistakes: [
+      "Using the shoulders",
+      "Swinging the weight",
+      "Bending the wrists inconsistently",
+      "Cutting range short",
+      "Dropping the weight too fast",
     ],
-    mistakes: ["Swinging legs", "Short range of motion"],
   },
 ];
 
@@ -753,16 +914,64 @@ const PROFILE = {
   score: BASELINE_INBODY.score,
 };
 
-// ── HOOKS ────────────────────────────────────────────────────────────────────
-function useLS(key, init) {
-  const [v, setV] = useState(() => {
-    try {
-      const s = localStorage.getItem(key);
-      return s ? JSON.parse(s) : init;
-    } catch {
-      return init;
+// ── HOOKS & STORAGE MIGRATION ───────────────────────────────────────────────
+const STORAGE_VERSION = 2;
+
+const STORAGE_KEYS = {
+  logs: "senpai_workout_logs",
+  workoutCompletions: "senpai_workout_completions",
+  dietLogs: "senpai_diet_logs",
+  walkLogs: "senpai_walk_logs",
+  measurements: "senpai_measurements",
+  inbody: "senpai_inbody",
+  meta: "senpai_meta",
+};
+
+// If you rename exercise IDs, map oldId -> newId here to preserve history
+const EXERCISE_ID_MAP = {
+  // "oldId": "newId",
+};
+
+function safeParseJSON(raw, fallback) {
+  if (raw == null) return fallback;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+
+function remapWorkoutLogs(logs) {
+  if (!logs || typeof logs !== "object" || Array.isArray(logs)) return {};
+  const next = {};
+  for (const [oldId, sessions] of Object.entries(logs)) {
+    const newId = EXERCISE_ID_MAP[oldId] || oldId;
+    next[newId] = Array.isArray(sessions) ? sessions : [];
+  }
+  return next;
+}
+
+function readState(key, fallback, { legacyKeys = [], migrate = (v) => v } = {}) {
+  if (typeof window === "undefined") return fallback;
+  const current = safeParseJSON(localStorage.getItem(key), null);
+  if (current !== null) return migrate(current);
+  for (const legacyKey of legacyKeys) {
+    const legacy = safeParseJSON(localStorage.getItem(legacyKey), null);
+    if (legacy !== null) {
+      const migrated = migrate(legacy);
+      try {
+        localStorage.setItem(key, JSON.stringify(migrated));
+      } catch {}
+      return migrated;
     }
-  });
+  }
+  return fallback;
+}
+
+function useLS(key, init) {
+  // keep same API but add migration for known keys
+  const migrate = key === STORAGE_KEYS.logs ? remapWorkoutLogs : (v) => v;
+  const [v, setV] = useState(() => readState(key, init, { migrate }));
   useEffect(() => {
     try {
       localStorage.setItem(key, JSON.stringify(v));
@@ -781,9 +990,10 @@ function nextTarget(ex, logs) {
     };
   const last = logs[logs.length - 1];
   const workingSets = Array.isArray(last.sets) ? last.sets : [];
-  const best =
-    workingSets.reduce((b, s) => (s.reps > b.reps ? s : b), workingSets[0]) ||
-    { weight: ex.sw, reps: ex.range[0] };
+  const best = workingSets.reduce(
+    (b, s) => (s.reps > b.reps ? s : b),
+    workingSets[0],
+  ) || { weight: ex.sw, reps: ex.range[0] };
   const step =
     best.weight < 10
       ? 1.25
@@ -1153,11 +1363,27 @@ function Dashboard({
           }}
         >
           <div>
-            <div style={{ fontSize: 12, color: C.P, fontWeight: 700, letterSpacing: 1 }}>
+            <div
+              style={{
+                fontSize: 12,
+                color: C.P,
+                fontWeight: 700,
+                letterSpacing: 1,
+              }}
+            >
               TODAY'S TARGETS
             </div>
-            <div style={{ fontSize: 18, fontWeight: 800, color: C.text, marginTop: 2 }}>
-              {dayType === "Rest" ? "Recovery targets" : `${dayType} Day priorities`}
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 800,
+                color: C.text,
+                marginTop: 2,
+              }}
+            >
+              {dayType === "Rest"
+                ? "Recovery targets"
+                : `${dayType} Day priorities`}
             </div>
           </div>
           {dayType !== "Rest" && (
@@ -1168,7 +1394,8 @@ function Dashboard({
         </div>
         {dayType === "Rest" ? (
           <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>
-            60 min walk, hydration, and recovery. Use today to reset before the next push session.
+            60 min walk, hydration, and recovery. Use today to reset before the
+            next push session.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -1188,14 +1415,22 @@ function Dashboard({
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{ex.name}</div>
-                    <div style={{ fontSize: 12, color: C.muted }}>{ex.muscle}</div>
+                    <div
+                      style={{ fontSize: 14, fontWeight: 700, color: C.text }}
+                    >
+                      {ex.name}
+                    </div>
+                    <div style={{ fontSize: 12, color: C.muted }}>
+                      {ex.muscle}
+                    </div>
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontSize: 15, fontWeight: 800, color: C.P }}>
                       {target.weight}kg
                     </div>
-                    <div style={{ fontSize: 11, color: C.muted }}>x{target.reps} reps</div>
+                    <div style={{ fontSize: 11, color: C.muted }}>
+                      x{target.reps} reps
+                    </div>
                   </div>
                 </div>
               );
@@ -1798,13 +2033,11 @@ function ExCard({ ex, logs, onLog }) {
                       <div style={{ height: 120, marginTop: 8 }}>
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart
-                            data={history
-                              .slice(-8)
-                              .map((h, i) => ({
-                                w: i + 1,
-                                kg: h.sets[0]?.weight || 0,
-                                reps: h.sets[0]?.reps || 0,
-                              }))}
+                            data={history.slice(-8).map((h, i) => ({
+                              w: i + 1,
+                              kg: h.sets[0]?.weight || 0,
+                              reps: h.sets[0]?.reps || 0,
+                            }))}
                           >
                             <CartesianGrid
                               strokeDasharray="3 3"
@@ -2003,14 +2236,21 @@ function LogModal({ ex, onClose, onSave }) {
 }
 
 // ── WORKOUT PAGE ──────────────────────────────────────────────────────────────
-function WorkoutPage({ logs, setLogs, workoutCompletions, setWorkoutCompletions }) {
+function WorkoutPage({
+  logs,
+  setLogs,
+  workoutCompletions,
+  setWorkoutCompletions,
+}) {
   const [selectedDay, setSelectedDay] = useState(getDayType());
   const [logEx, setLogEx] = useState(null);
   const exercises = BY_DAY[selectedDay] || [];
   const todayKey = today();
   const todayReady =
     exercises.length > 0 &&
-    exercises.every((ex) => (logs[ex.id] || []).some((entry) => entry.date === todayKey));
+    exercises.every((ex) =>
+      (logs[ex.id] || []).some((entry) => entry.date === todayKey),
+    );
   const completed = Boolean(workoutCompletions?.[todayKey]);
 
   function saveLog(ex, sets) {
@@ -2075,7 +2315,8 @@ function WorkoutPage({ logs, setLogs, workoutCompletions, setWorkoutCompletions 
             ...glass,
             padding: 16,
             border: `1px solid ${C.P}25`,
-            background: "linear-gradient(135deg, rgba(0,229,255,0.06), transparent)",
+            background:
+              "linear-gradient(135deg, rgba(0,229,255,0.06), transparent)",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -3140,7 +3381,13 @@ function InBodyPage({ inbody, setInBody }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <SH title="InBody Tracker" sub="Body composition scans" />
         <Btn onClick={() => setAdding(!adding)} size="sm">
           <Plus size={12} /> New Scan
@@ -3149,13 +3396,29 @@ function InBodyPage({ inbody, setInBody }) {
 
       {adding && (
         <div style={{ ...glass, padding: 20, border: `1px solid ${C.P}30` }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 16 }}>
+          <div
+            style={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: C.text,
+              marginBottom: 16,
+            }}
+          >
             New InBody Scan
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+              marginBottom: 16,
+            }}
+          >
             {fields.map(([k, label, unit]) => (
               <div key={k}>
-                <div style={{ fontSize: 12, color: C.muted, marginBottom: 4 }}>{label} ({unit})</div>
+                <div style={{ fontSize: 12, color: C.muted, marginBottom: 4 }}>
+                  {label} ({unit})
+                </div>
                 <input
                   type="number"
                   step={0.1}
@@ -3192,10 +3455,24 @@ function InBodyPage({ inbody, setInBody }) {
       )}
 
       <div style={{ ...glass, padding: 20, border: `1px solid ${C.P}20` }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: C.P, letterSpacing: 1, marginBottom: 12 }}>
+        <div
+          style={{
+            fontSize: 13,
+            fontWeight: 600,
+            color: C.P,
+            letterSpacing: 1,
+            marginBottom: 12,
+          }}
+        >
           BASELINE SCAN
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(110px,1fr))", gap: 10 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(110px,1fr))",
+            gap: 10,
+          }}
+        >
           {[
             ["Weight", `${baseline.weight} kg`, C.P],
             ["Muscle", `${baseline.smm} kg`, C.A],
@@ -3205,9 +3482,19 @@ function InBodyPage({ inbody, setInBody }) {
             ["Visceral", `Lvl ${baseline.visceral}`, C.D],
             ["Forearms", `${baseline.forearms || PROFILE.forearms} cm`, C.S],
           ].map(([label, value, color]) => (
-            <div key={label} style={{ padding: "10px", background: "rgba(255,255,255,0.03)", borderRadius: 10, textAlign: "center" }}>
+            <div
+              key={label}
+              style={{
+                padding: "10px",
+                background: "rgba(255,255,255,0.03)",
+                borderRadius: 10,
+                textAlign: "center",
+              }}
+            >
               <div style={{ fontSize: 11, color: C.muted }}>{label}</div>
-              <div style={{ fontSize: 17, fontWeight: 800, color }}>{value}</div>
+              <div style={{ fontSize: 17, fontWeight: 800, color }}>
+                {value}
+              </div>
             </div>
           ))}
         </div>
@@ -3215,61 +3502,174 @@ function InBodyPage({ inbody, setInBody }) {
 
       {last ? (
         <div style={{ ...glass, padding: 20 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 12 }}>
+          <div
+            style={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: C.text,
+              marginBottom: 12,
+            }}
+          >
             Scan Comparison
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10, marginBottom: 16 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))",
+              gap: 10,
+              marginBottom: 16,
+            }}
+          >
             {[
               ["Weight", `${baseline.weight} → ${last.weight}`, C.P],
               ["Muscle", `${baseline.smm} → ${last.smm}`, C.A],
               ["Body Fat", `${baseline.pbf} → ${last.pbf}`, C.W],
               ["Score", `${baseline.score} → ${last.score}`, C.S],
             ].map(([label, value, color]) => (
-              <div key={label} style={{ padding: 12, background: "rgba(255,255,255,0.03)", borderRadius: 10 }}>
-                <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>{label}</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color }}>{value}</div>
+              <div
+                key={label}
+                style={{
+                  padding: 12,
+                  background: "rgba(255,255,255,0.03)",
+                  borderRadius: 10,
+                }}
+              >
+                <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>
+                  {label}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700, color }}>
+                  {value}
+                </div>
               </div>
             ))}
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20 }}>
             <div style={{ ...glass, padding: 20 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 16 }}>
+              <div
+                style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: C.text,
+                  marginBottom: 16,
+                }}
+              >
                 Weight Trend
               </div>
               <div style={{ height: 200 }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={[{ date: "Base", weight: baseline.weight }, ...inbody.map((scan) => ({ date: fmt(scan.date), weight: scan.weight }))]}>
+                  <AreaChart
+                    data={[
+                      { date: "Base", weight: baseline.weight },
+                      ...inbody.map((scan) => ({
+                        date: fmt(scan.date),
+                        weight: scan.weight,
+                      })),
+                    ]}
+                  >
                     <defs>
                       <linearGradient id="wgt" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor={C.P} stopOpacity={0.25} />
                         <stop offset="95%" stopColor={C.P} stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="date" tick={{ fill: C.muted, fontSize: 10 }} axisLine={false} />
-                    <YAxis tick={{ fill: C.muted, fontSize: 10 }} axisLine={false} />
-                    <Tooltip contentStyle={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, color: C.text }} />
-                    <Area type="monotone" dataKey="weight" stroke={C.P} strokeWidth={2.5} fill="url(#wgt)" />
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.05)"
+                    />
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fill: C.muted, fontSize: 10 }}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tick={{ fill: C.muted, fontSize: 10 }}
+                      axisLine={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: C.bg2,
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 8,
+                        color: C.text,
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="weight"
+                      stroke={C.P}
+                      strokeWidth={2.5}
+                      fill="url(#wgt)"
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
             <div style={{ ...glass, padding: 20 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 16 }}>
+              <div
+                style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: C.text,
+                  marginBottom: 16,
+                }}
+              >
                 Composition Trend
               </div>
               <div style={{ height: 220 }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={compositionData.length ? compositionData : [{ date: "Base", smm: baseline.smm, pbf: baseline.pbf }] }>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="date" tick={{ fill: C.muted, fontSize: 10 }} axisLine={false} />
-                    <YAxis tick={{ fill: C.muted, fontSize: 10 }} axisLine={false} />
-                    <Tooltip contentStyle={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, color: C.text }} />
-                    <Line type="monotone" dataKey="smm" stroke={C.A} strokeWidth={2} dot={{ fill: C.A, r: 3 }} name="SMM (kg)" />
-                    <Line type="monotone" dataKey="pbf" stroke={C.W} strokeWidth={2} dot={{ fill: C.W, r: 3 }} name="PBF (%)" />
+                  <LineChart
+                    data={
+                      compositionData.length
+                        ? compositionData
+                        : [
+                            {
+                              date: "Base",
+                              smm: baseline.smm,
+                              pbf: baseline.pbf,
+                            },
+                          ]
+                    }
+                  >
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.05)"
+                    />
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fill: C.muted, fontSize: 10 }}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tick={{ fill: C.muted, fontSize: 10 }}
+                      axisLine={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: C.bg2,
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 8,
+                        color: C.text,
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="smm"
+                      stroke={C.A}
+                      strokeWidth={2}
+                      dot={{ fill: C.A, r: 3 }}
+                      name="SMM (kg)"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="pbf"
+                      stroke={C.W}
+                      strokeWidth={2}
+                      dot={{ fill: C.W, r: 3 }}
+                      name="PBF (%)"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -3279,7 +3679,14 @@ function InBodyPage({ inbody, setInBody }) {
       ) : (
         <div style={{ ...glass, padding: 40, textAlign: "center" }}>
           <div style={{ fontSize: 40 }}>🔬</div>
-          <div style={{ fontSize: 16, color: C.text, fontWeight: 600, marginTop: 12 }}>
+          <div
+            style={{
+              fontSize: 16,
+              color: C.text,
+              fontWeight: 600,
+              marginTop: 12,
+            }}
+          >
             No scans logged yet
           </div>
           <div style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>
@@ -3298,21 +3705,69 @@ function GoalsPage({ onExportData, onImportData, inbody }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ ...glass, padding: 20 }}>
-        <SH title="Monthly Goals" sub="Phase-based body recomposition targets" />
+        <SH
+          title="Monthly Goals"
+          sub="Phase-based body recomposition targets"
+        />
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {[
-            ["⚖️ Weight", [PROFILE.weight, GOALS[0].weight[1]], curr.weight, "kg", PROFILE.weight, C.P],
-            ["💪 Muscle Mass", [PROFILE.smm, GOALS[0].smm[1]], curr.smm, "kg", PROFILE.smm, C.A],
-            ["🔥 Body Fat", [PROFILE.pbf, GOALS[0].pbf[1]], curr.pbf, "%", PROFILE.pbf, C.W],
-            ["⭐ InBody Score", [PROFILE.score, GOALS[0].score[1]], curr.score, "pts", PROFILE.score, C.S],
+            [
+              "⚖️ Weight",
+              [PROFILE.weight, GOALS[0].weight[1]],
+              curr.weight,
+              "kg",
+              PROFILE.weight,
+              C.P,
+            ],
+            [
+              "💪 Muscle Mass",
+              [PROFILE.smm, GOALS[0].smm[1]],
+              curr.smm,
+              "kg",
+              PROFILE.smm,
+              C.A,
+            ],
+            [
+              "🔥 Body Fat",
+              [PROFILE.pbf, GOALS[0].pbf[1]],
+              curr.pbf,
+              "%",
+              PROFILE.pbf,
+              C.W,
+            ],
+            [
+              "⭐ InBody Score",
+              [PROFILE.score, GOALS[0].score[1]],
+              curr.score,
+              "pts",
+              PROFILE.score,
+              C.S,
+            ],
           ].map(([label, range, val, unit, base, color]) => {
             const targetMax = Array.isArray(range) ? range[1] : range;
-            const pct = Math.max(0, Math.min(100, ((Number(val) - Number(base)) / (Number(targetMax) - Number(base))) * 100 || 0));
+            const pct = Math.max(
+              0,
+              Math.min(
+                100,
+                ((Number(val) - Number(base)) /
+                  (Number(targetMax) - Number(base))) *
+                  100 || 0,
+              ),
+            );
             return (
               <div key={label}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: 4,
+                  }}
+                >
                   <span style={{ fontSize: 13, color: C.text }}>{label}</span>
-                  <span style={{ fontSize: 13, color, fontWeight: 600 }}>{Array.isArray(range) ? range.join("–") : range}{unit}</span>
+                  <span style={{ fontSize: 13, color, fontWeight: 600 }}>
+                    {Array.isArray(range) ? range.join("–") : range}
+                    {unit}
+                  </span>
                 </div>
                 <Bar2 pct={pct} color={color} height={5} />
               </div>
@@ -3323,23 +3778,59 @@ function GoalsPage({ onExportData, onImportData, inbody }) {
 
       {GOALS.map((g, gi) => (
         <div key={g.month} style={{ ...glass, padding: 20 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 800, color: C.text }}>{g.month}</div>
-            <Badge text={gi === 0 ? "Current" : "Upcoming"} color={gi === 0 ? C.P : C.muted} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <div style={{ fontSize: 16, fontWeight: 800, color: C.text }}>
+              {g.month}
+            </div>
+            <Badge
+              text={gi === 0 ? "Current" : "Upcoming"}
+              color={gi === 0 ? C.P : C.muted}
+            />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[
               ["⚖️ Weight", g.weight, curr.weight, "kg", PROFILE.weight, C.P],
               ["💪 Muscle Mass", g.smm, curr.smm, "kg", PROFILE.smm, C.A],
               ["🔥 Body Fat", g.pbf, curr.pbf, "%", PROFILE.pbf, C.W],
-              ["⭐ InBody Score", g.score, curr.score, "pts", PROFILE.score, C.S],
+              [
+                "⭐ InBody Score",
+                g.score,
+                curr.score,
+                "pts",
+                PROFILE.score,
+                C.S,
+              ],
             ].map(([label, range, val, unit, base, color]) => {
-              const pct = Math.max(0, Math.min(100, ((Number(val) - Number(base)) / (Number(range[1]) - Number(base))) * 100 || 0));
+              const pct = Math.max(
+                0,
+                Math.min(
+                  100,
+                  ((Number(val) - Number(base)) /
+                    (Number(range[1]) - Number(base))) *
+                    100 || 0,
+                ),
+              );
               return (
                 <div key={label}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: 4,
+                    }}
+                  >
                     <span style={{ fontSize: 13, color: C.text }}>{label}</span>
-                    <span style={{ fontSize: 13, color, fontWeight: 600 }}>{range.join("–")}{unit}</span>
+                    <span style={{ fontSize: 13, color, fontWeight: 600 }}>
+                      {range.join("–")}
+                      {unit}
+                    </span>
                   </div>
                   <Bar2 pct={gi === 0 ? pct : 0} color={color} height={5} />
                 </div>
@@ -3353,17 +3844,62 @@ function GoalsPage({ onExportData, onImportData, inbody }) {
         <SH title="Achievements" sub="Milestones & badges" />
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
           {[
-            { name: "First Workout", desc: "Log your first session", icon: "🏋️", earned: false },
-            { name: "Week Warrior", desc: "7 day streak", icon: "🔥", earned: false },
-            { name: "Protein King", desc: "Hit protein 7 days", icon: "🥩", earned: false },
-            { name: "Iron Will", desc: "30 workouts", icon: "⚡", earned: false },
-            { name: "First PR", desc: "Break a personal record", icon: "🏆", earned: false },
-            { name: "Recomp Mode", desc: "SMM up, fat down", icon: "💎", earned: false },
+            {
+              name: "First Workout",
+              desc: "Log your first session",
+              icon: "🏋️",
+              earned: false,
+            },
+            {
+              name: "Week Warrior",
+              desc: "7 day streak",
+              icon: "🔥",
+              earned: false,
+            },
+            {
+              name: "Protein King",
+              desc: "Hit protein 7 days",
+              icon: "🥩",
+              earned: false,
+            },
+            {
+              name: "Iron Will",
+              desc: "30 workouts",
+              icon: "⚡",
+              earned: false,
+            },
+            {
+              name: "First PR",
+              desc: "Break a personal record",
+              icon: "🏆",
+              earned: false,
+            },
+            {
+              name: "Recomp Mode",
+              desc: "SMM up, fat down",
+              icon: "💎",
+              earned: false,
+            },
           ].map((a) => (
-            <div key={a.name} style={{ ...glass, padding: "14px 16px", width: 140, textAlign: "center", opacity: a.earned ? 1 : 0.5, border: `1px solid ${a.earned ? C.W + "40" : C.border}`, background: a.earned ? `rgba(245,158,11,0.08)` : C.card }}>
+            <div
+              key={a.name}
+              style={{
+                ...glass,
+                padding: "14px 16px",
+                width: 140,
+                textAlign: "center",
+                opacity: a.earned ? 1 : 0.5,
+                border: `1px solid ${a.earned ? C.W + "40" : C.border}`,
+                background: a.earned ? `rgba(245,158,11,0.08)` : C.card,
+              }}
+            >
               <div style={{ fontSize: 28, marginBottom: 6 }}>{a.icon}</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{a.name}</div>
-              <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{a.desc}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>
+                {a.name}
+              </div>
+              <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>
+                {a.desc}
+              </div>
               {a.earned && <Badge text="Earned!" color={C.W} />}
             </div>
           ))}
@@ -3380,11 +3916,23 @@ function GoalsPage({ onExportData, onImportData, inbody }) {
             <ArrowUp size={14} /> Import Data
           </Btn>
         </div>
-        <div style={{ fontSize: 12, color: C.muted, marginTop: 10, lineHeight: 1.6 }}>
-          Exports include workouts, completions, diet, walking, measurements, and InBody scans. Import a JSON backup to restore everything in one step.
+        <div
+          style={{
+            fontSize: 12,
+            color: C.muted,
+            marginTop: 10,
+            lineHeight: 1.6,
+          }}
+        >
+          Exports include workouts, completions, diet, walking, measurements,
+          and InBody scans. Import a JSON backup to restore everything in one
+          step.
         </div>
-        <div style={{ fontSize: 12, color: C.W, marginTop: 8, lineHeight: 1.6 }}>
-          Data stays in this browser until you export it. Clearing browser data will remove localStorage content.
+        <div
+          style={{ fontSize: 12, color: C.W, marginTop: 8, lineHeight: 1.6 }}
+        >
+          Data stays in this browser until you export it. Clearing browser data
+          will remove localStorage content.
         </div>
       </div>
     </div>
@@ -3619,6 +4167,16 @@ export default function App() {
   const [inbody, setInBody] = useLS("senpai_inbody", []);
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem(
+        STORAGE_KEYS.meta,
+        JSON.stringify({ version: STORAGE_VERSION, updatedAt: new Date().toISOString() }),
+      );
+    } catch {}
+  }, []);
+
   // Calculate streak
   const streak = useMemo(() => {
     let s = 0;
@@ -3651,15 +4209,26 @@ export default function App() {
     });
   }, [dietLogs, inbody, logs, measurements, walkLogs, workoutCompletions]);
 
-  const importData = useCallback((payload) => {
-    if (!payload || typeof payload !== "object") return;
-    if (payload.logs) setLogs(payload.logs);
-    if (payload.workoutCompletions) setWorkoutCompletions(payload.workoutCompletions);
-    if (payload.dietLogs) setDietLogs(payload.dietLogs);
-    if (payload.walkLogs) setWalkLogs(payload.walkLogs);
-    if (payload.measurements) setMeasurements(payload.measurements);
-    if (payload.inbody) setInBody(payload.inbody);
-  }, [setDietLogs, setInBody, setLogs, setMeasurements, setWalkLogs, setWorkoutCompletions]);
+  const importData = useCallback(
+    (payload) => {
+      if (!payload || typeof payload !== "object") return;
+      if (payload.logs) setLogs(payload.logs);
+      if (payload.workoutCompletions)
+        setWorkoutCompletions(payload.workoutCompletions);
+      if (payload.dietLogs) setDietLogs(payload.dietLogs);
+      if (payload.walkLogs) setWalkLogs(payload.walkLogs);
+      if (payload.measurements) setMeasurements(payload.measurements);
+      if (payload.inbody) setInBody(payload.inbody);
+    },
+    [
+      setDietLogs,
+      setInBody,
+      setLogs,
+      setMeasurements,
+      setWalkLogs,
+      setWorkoutCompletions,
+    ],
+  );
 
   function handleImportClick() {
     fileInputRef.current?.click();
@@ -3673,7 +4242,9 @@ export default function App() {
       const text = await file.text();
       importData(JSON.parse(text));
     } catch {
-      alert("Could not import backup. Please select a valid Senpai Physique JSON file.");
+      alert(
+        "Could not import backup. Please select a valid Senpai Physique JSON file.",
+      );
     }
   }
 
