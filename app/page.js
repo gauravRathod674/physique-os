@@ -653,33 +653,6 @@ const PULL = [
       "Using excessive weight with partial reps",
     ],
   },
-
-  {
-    id: "reb",
-    name: "Reverse EZ Bar Curl",
-    muscle: "Brachioradialis",
-    sec: "Forearms",
-    sets: 2,
-    range: [10, 15],
-    rir: 1,
-    tempo: "2-0-2",
-    rest: 60,
-    sw: 10,
-    cues: [
-      "Use an overhand grip",
-      "Keep wrists straight",
-      "Lock elbows by your sides",
-      "Curl smoothly through the forearms",
-      "Lower slowly without losing tension",
-    ],
-    mistakes: [
-      "Bending the wrists back",
-      "Using body swing",
-      "Letting elbows move forward",
-      "Going too heavy too soon",
-      "Cutting the range short",
-    ],
-  },
 ];
 
 const LEGS = [
@@ -944,6 +917,32 @@ const LEGS = [
       "Bending the wrists inconsistently",
       "Cutting range short",
       "Dropping the weight too fast",
+    ],
+  },
+  {
+    id: "reb",
+    name: "Reverse EZ Bar Curl",
+    muscle: "Brachioradialis",
+    sec: "Forearms",
+    sets: 2,
+    range: [10, 15],
+    rir: 1,
+    tempo: "2-0-2",
+    rest: 60,
+    sw: 10,
+    cues: [
+      "Use an overhand grip",
+      "Keep wrists straight",
+      "Lock elbows by your sides",
+      "Curl smoothly through the forearms",
+      "Lower slowly without losing tension",
+    ],
+    mistakes: [
+      "Bending the wrists back",
+      "Using body swing",
+      "Letting elbows move forward",
+      "Going too heavy too soon",
+      "Cutting the range short",
     ],
   },
 ];
